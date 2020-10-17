@@ -110,7 +110,16 @@ namespace MLGui
                 ModelCreationPopup.Visibility = Visibility.Visible;
                 ModelCreationPopup.DataContext = model;
 
+                string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "getColumnsAndRows.py", "");
 
+                string[] column1 = new string[1];
+
+                using (var reader = new StringReader(dropDownOptions))
+                {
+                    column1 = reader.ReadLine().Split(',');
+                }
+
+                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = column1;
 
             }
         }
@@ -126,6 +135,7 @@ namespace MLGui
             start.Arguments = path;
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
+            start.CreateNoWindow = true;
             using (Process process = Process.Start(start))
             {
                 using (StreamReader reader = process.StandardOutput)
