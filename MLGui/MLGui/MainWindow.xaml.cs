@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,6 +24,10 @@ namespace MLGui
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        string pythonPath;
+
+        string pythonPathFileName = System.AppDomain.CurrentDomain.BaseDirectory + "pythonPath.txt";
+
         LinearRegression regression;
         public MainWindow()
         {
@@ -29,7 +35,31 @@ namespace MLGui
             regression = new LinearRegression();
             regression = new LinearRegression();
             RegressionTab.DataContext = regression;
-            //set classification tab data context here
+            if (File.Exists(pythonPathFileName))
+            {
+                using (StreamReader reader = new StreamReader(pythonPathFileName))
+                {
+                    pythonPath = reader.ReadToEnd();
+                } 
+            } else
+            {
+                //ask for python install 
+
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                fileDialog.Filter = "Executable (*.exe)|*.exe";
+                fileDialog.Title = "Select Python.exe";
+                if (fileDialog.ShowDialog() == true)
+                {
+                    if (fileDialog.FileName.EndsWith("python.exe"))
+                    {
+                        pythonPath = fileDialog.FileName;
+                        using (StreamWriter writer = new StreamWriter(pythonPathFileName))
+                        {
+                            writer.WriteLine(pythonPath);
+                        }
+                    }
+                }
+            }
         }
         
         protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -70,10 +100,41 @@ namespace MLGui
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (!regression.SelectModel)
+            {
+                //define a regression model
+                //get a list of the names
+                //set model creation list sources.
 
+                RegressionModel model = new RegressionModel();
+                ModelCreationPopup.Visibility = Visibility.Visible;
+                ModelCreationPopup.DataContext = model;
+
+
+
+            }
         }
 
+        string RunFileAndReturnOutput(string path, string args)
+        {
+            path.Trim();
+            args.Trim();
+            path += " " + args;
+            
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = pythonPath;
+            start.Arguments = path;
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            using (Process process = Process.Start(start))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string output = reader.ReadToEnd();
+                    return output;
+                }
+            }
+        }
 
     }
 }
