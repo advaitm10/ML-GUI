@@ -12,7 +12,7 @@ namespace MLGui
     class LinearRegression : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        
         string directory, data, modelPath;
         RegressionModel model;
         bool selectModel;

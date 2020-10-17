@@ -1,1 +1,1 @@
-C:\Users\ignor\AppData\Local\Programs\Python\Python39\python.exe
+C:\Users\ignor\AppData\Local\Programs\Python\Python38\python.exe

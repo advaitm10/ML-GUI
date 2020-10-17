@@ -121,15 +121,35 @@ namespace MLGui
                     column1 = reader.ReadLine().Split(',');
                 }
 
-                ObservableCollection<CheckableItem> checkableItems = new ObservableCollection<CheckableItem>();
+                ObservableCollection<CheckableItem> checkableItemsDependent = new ObservableCollection<CheckableItem>();
                 foreach (string s in column1)
                 {
                     CheckableItem item = new CheckableItem(s, false);
-                    checkableItems.Add(item);
-                    item.CheckedChanged += model.HandleCheckSelectionChanged;
+                    checkableItemsDependent.Add(item);
+                    item.CheckedChanged += model.HandleCheckSelectionChangedDependentColumn;
+                }
+                //so, let's make a function to cut down on this duplication
+
+                ObservableCollection<CheckableItem> checkableItemsIndependentCat = new ObservableCollection<CheckableItem>();
+                foreach (string s in column1)
+                {
+                    CheckableItem item = new CheckableItem(s, false);
+                    checkableItemsIndependentCat.Add(item);
+                    item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCat;
                 }
 
-                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItems;
+                ObservableCollection<CheckableItem> checkableItemsIndependentCont = new ObservableCollection<CheckableItem>();
+                foreach (string s in column1)
+                {
+                    CheckableItem item = new CheckableItem(s, false);
+                    checkableItemsIndependentCat.Add(item);
+                    item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCont;
+                }
+
+                //We'll have to subscribe to an event to get when the model is being created. 
+                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItemsIndependentCat;
+                ModelCreationPopup.DependentColumnSelector.ItemsSource = checkableItemsDependent;
+
 
             }
         }

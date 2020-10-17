@@ -14,9 +14,8 @@ namespace MLGui
         public event PropertyChangedEventHandler PropertyChanged;
 
         string dependentColumns;
-        string independentColumns;
-        string dependentRows;
-        string independentRows;
+        string IndependentColumnsContinuous;
+        string IndependentColumnsCategorical;
 
         public string SelectedIndColumn
         {
@@ -38,19 +37,37 @@ namespace MLGui
             }
         }
 
-        public void HandleCheckSelectionChanged(CheckableItem item)
+        public void HandleCheckSelectionChangedDependentColumn(CheckableItem item)
+        {
+            DependentColumns = GetNewStringFromItemChecked(item, DependentColumns);
+        }
+
+        public void HandleCheckSelectionChangedIndependentColumnCont(CheckableItem item)
+        {
+            IndependentColumnsContinuous = GetNewStringFromItemChecked(item, IndependentColumnsContinuous);
+
+        }
+
+        public void HandleCheckSelectionChangedIndependentColumnCat(CheckableItem item)
+        {
+            IndependentColumnsCategorical = GetNewStringFromItemChecked(item, IndependentColumnsCategorical);
+        }
+
+        string GetNewStringFromItemChecked(CheckableItem item, string initial)
         {
             if (item.Checked == false)
             {
                 //so, it got changed to false, so we have to remove it from the list
-                DependentColumns = RemoveStringFromCSVString(DependentColumns, item.Content);
+                initial = RemoveStringFromCSVString(initial, item.Content);
             }
-            if (item.Checked == true) {
-                //add it to the list. Much easier.
-                DependentColumns += item.Content + ",";
+            if (item.Checked == true)
+            {
+                //add it to the list
+                initial += item.Content + ",";
             }
-            Console.WriteLine("DependentColumns: " + DependentColumns);
+            return initial;
         }
+
         string RemoveStringFromCSVString(string csv, string remove)
         {
             csv = csv.Substring(0, csv.Length - 1);
