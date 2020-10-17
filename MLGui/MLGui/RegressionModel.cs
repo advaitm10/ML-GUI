@@ -18,8 +18,6 @@ namespace MLGui
         string dependentRows;
         string independentRows;
 
-        ICommand addColumn;
-
         public string SelectedIndColumn
         {
             get;
@@ -40,22 +38,36 @@ namespace MLGui
             }
         }
 
-        public ICommand AddColumn
+        public void HandleCheckSelectionChanged(CheckableItem item)
         {
-            get
+            if (item.Checked == false)
             {
-                if (addColumn == null)
-                {
-                    addColumn = new RelayCommand( param => this.addColumnFunction());
-                }
-                return addColumn;
-            } 
+                //so, it got changed to false, so we have to remove it from the list
+                DependentColumns = RemoveStringFromCSVString(DependentColumns, item.Content);
+            }
+            if (item.Checked == true) {
+                //add it to the list. Much easier.
+                DependentColumns += item.Content + ",";
+            }
+            Console.WriteLine("DependentColumns: " + DependentColumns);
         }
-        void addColumnFunction()
+        string RemoveStringFromCSVString(string csv, string remove)
         {
-            DependentColumns += SelectedIndColumn + " ";
-            Console.WriteLine("Dependent Columns: " + DependentColumns);
+            csv = csv.Substring(0, csv.Length - 1);
+
+            string[] values = csv.Split(',');
+            string result = "";
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (!remove.Equals(values[i]))
+                {
+                    result += values[i] + ",";
+                }
+            }
+            return result;
         }
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

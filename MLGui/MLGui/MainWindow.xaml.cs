@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -110,16 +111,25 @@ namespace MLGui
                 ModelCreationPopup.Visibility = Visibility.Visible;
                 ModelCreationPopup.DataContext = model;
 
-                string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "getColumnsAndRows.py", "");
+                string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data);
 
                 string[] column1 = new string[1];
 
+                //reads from the python script
                 using (var reader = new StringReader(dropDownOptions))
                 {
                     column1 = reader.ReadLine().Split(',');
                 }
 
-                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = column1;
+                ObservableCollection<CheckableItem> checkableItems = new ObservableCollection<CheckableItem>();
+                foreach (string s in column1)
+                {
+                    CheckableItem item = new CheckableItem(s, false);
+                    checkableItems.Add(item);
+                    item.CheckedChanged += model.HandleCheckSelectionChanged;
+                }
+
+                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItems;
 
             }
         }
