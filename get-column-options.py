@@ -3,10 +3,10 @@ import sys
 
 ''' Takes filepath to the data as only argument '''
 
-datapath = sys.argv[0]
-pd.read_csv(datapath)
+datapath = sys.argv[1]
+df = pd.read_csv(datapath)
 
 pString = ""
-for i in pd.columns:
+for i in df.columns:
     pString += (i+",")
 print(pString)

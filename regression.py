@@ -11,10 +11,10 @@ import pandas as pd
 
 #take in data file paths using system args
 args = sys.argv
-datapath = args[0]
-y = args[1]
-categorical = args[2].split(",")
-continuous = args[3].split(",")
+datapath = args[1]
+y = args[2]
+categorical = args[3].split(",")
+continuous = args[4].split(",")
 
 
 datapath = untar_data(URLs.ADULT_SAMPLE)
