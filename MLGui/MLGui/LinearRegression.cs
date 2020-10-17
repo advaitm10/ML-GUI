@@ -10,12 +10,16 @@ namespace MLGui
 {
     class LinearRegression : INotifyPropertyChanged
     {
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         string directory, data, modelPath;
         RegressionModel model;
         bool selectModel;
+
+        public LinearRegression()
+        {
+            model = new RegressionModel();
+        }
 
         public string Directory
         {
@@ -56,8 +60,7 @@ namespace MLGui
             }
         }
 
-        //The downside of this is if it's a path it's not going to work
-        //So, this is an optional string for the model if select model is checked. 
+        //This is an optional string for the model if select model is checked. 
         public string ModelPath
         {
             get
@@ -81,6 +84,11 @@ namespace MLGui
             {
                 model = value;
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Directory: {0}, Model: {1}, Data: {2}", Directory, Model, Data);
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
