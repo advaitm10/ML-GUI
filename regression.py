@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 
 '''
-     arguments should be a file path for the data, y name, categorical names, continuous names
+     arguments: file path for the data, y name, categorical names, continuous names
+     returns: for each cycle: row of strings with epoch, train_loss, valid_loss, accuracy, time. Split by blank space
 
      Notes: Figure out how to allow user to use their own model
 '''
@@ -15,6 +16,7 @@ datapath = args[1]
 y = args[2]
 categorical = args[3].split(",")
 continuous = args[4].split(",")
+cycles = int(args[5])
 
 
 datapath = untar_data(URLs.ADULT_SAMPLE)
@@ -24,6 +26,6 @@ dls = TabularDataLoaders.from_df(df, path=datapath, y_names=y,
     cont_names = continuous,
     procs = [Categorify, FillMissing, Normalize])
 learn = tabular_learner(dls, metrics=accuracy)
-learn.fit_one_cycle(1)
+learn.fit_one_cycle(cycles)
 learn.path = Path('.')
 learn.export()
