@@ -153,8 +153,16 @@ namespace MLGui
 
         void OnModelCreate()
         {
-            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3}", 
-                regression.Data, model.DependentColumn, model.IndependentColumnsCategorical, model.IndependentColumnsContinuous));
+            Console.WriteLine("clicked model create button");
+            
+            string categorical = model.IndependentColumnsCategorical.Substring(0, model.IndependentColumnsCategorical.Length - 1);
+            string continuous = model.IndependentColumnsCategorical.Substring(0, model.IndependentColumnsCategorical.Length - 1);
+
+            Console.WriteLine(String.Format("{0} {1} {2} {3} {4}",
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
+
+            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3} {4}", 
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
             
         }
 

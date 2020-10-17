@@ -20,6 +20,21 @@ namespace MLGui
 
         ICommand createModelCommand;
 
+        int cycles;
+
+        public int Cycles
+        {
+            get
+            {
+                return cycles;
+            }
+            set
+            {
+                cycles = value;
+                Console.WriteLine("Cycles assigned to " + cycles);
+            }
+        }
+
         public string DependentColumn
         {
             get
@@ -29,6 +44,7 @@ namespace MLGui
             set
             {
                 dependentColumn = value;
+                Console.WriteLine("Dependent column: " + dependentColumn);
                 OnPropertyChanged();
             }
         }
@@ -48,11 +64,6 @@ namespace MLGui
         {
             //this function only exists so mainwindow knows when the button's been clicked
             CreateModelClicked();
-        }
-
-        public void HandleCheckSelectionChangedDependentColumn(CheckableItem item)
-        {
-            DependentColumns = GetNewStringFromItemChecked(item, DependentColumns);
         }
 
         public void HandleCheckSelectionChangedIndependentColumnCont(CheckableItem item)
