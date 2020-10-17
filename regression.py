@@ -18,9 +18,7 @@ categorical = args[3].split(",")
 continuous = args[4].split(",")
 cycles = int(args[5])
 
-
-datapath = untar_data(URLs.ADULT_SAMPLE)
-df = pd.read_csv(datapath/'adult.csv')
+df = pd.read_csv(datapath)
 dls = TabularDataLoaders.from_df(df, path=datapath, y_names=y,
     cat_names = categorical,
     cont_names = continuous,
