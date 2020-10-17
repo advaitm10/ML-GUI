@@ -7,12 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
         <TabControl TabStripPlacement="Left">
             <TabItem>
                 <TabItem.Header>
                     <TextBlock Text="Regression" FontSize="20"/>
                 </TabItem.Header>
+                <Grid>
+                    <TextBlock Text="Choose Data" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="DataSelector" HorizontalAlignment="Center" Width="300" Height="20"/>
+                </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -20,6 +23,6 @@
                 </TabItem.Header>
             </TabItem>
         </TabControl>
-        <local:StartMenu/>
+        <local:StartMenu Visibility="Collapsed"/>
     </Grid>
 </Window>

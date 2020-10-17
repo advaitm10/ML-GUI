@@ -1,7 +1,6 @@
 C:\Users\ignor\ML-GUI\MLGui\MLGui\bin\Debug\MLGui.exe.config
 C:\Users\ignor\ML-GUI\MLGui\MLGui\bin\Debug\MLGui.exe
 C:\Users\ignor\ML-GUI\MLGui\MLGui\bin\Debug\MLGui.pdb
-C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.csprojAssemblyReference.cache
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MainWindow.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\StartMenu.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\App.g.cs
