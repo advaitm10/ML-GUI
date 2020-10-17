@@ -12,20 +12,26 @@ namespace MLGui
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        string dependentColumn;
-        string independentColumn;
-        string dependentRow;
-        string independentRow;
+        string dependentColumns;
+        string independentColumns;
+        string dependentRows;
+        string independentRows;
 
         public string DependentColumn
         {
             get
             {
-                return dependentColumn;
+                return dependentColumns;
             }
             set
             {
-                dependentColumn = value;
+                string[] values = value.Split(',');
+                dependentColumns = "";
+                foreach (string s in values)
+                {
+                    dependentColumns += s + " ";
+                }
+                dependentColumns.Trim();
                 OnPropertyChanged();
             }
         }

@@ -70,10 +70,8 @@ namespace MLGui
 
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-            //either will continue to the final menu
-            //Or will open model creation page
-            MessageBox.Show(regression.ToString());
             
+
         }
 
 
