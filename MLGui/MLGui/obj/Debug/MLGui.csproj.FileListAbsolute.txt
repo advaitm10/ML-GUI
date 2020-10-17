@@ -15,3 +15,6 @@ C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.csproj.GenerateResource.cache
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.csproj.CoreCompileInputs.cache
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.exe
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.pdb
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.csprojAssemblyReference.cache
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ModelCreationPage.g.cs
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ModelCreationPage.baml
