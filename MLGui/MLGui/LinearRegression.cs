@@ -13,42 +13,79 @@ namespace MLGui
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        string directory, data, modelPath;
+        RegressionModel model;
+        bool selectModel;
+
         public string Directory
         {
-            get;
-            set;
+            get
+            {
+                return directory;
+            }
+            set
+            {
+                directory = value;
+                OnPropertyChanged();
+            }
         }
 
         public string Data
         {
-            get;
-            set;
+            get
+            {
+                return data;
+            }
+            set
+            {
+                data = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool SelectModel
         {
-            get;
-            set;
+            get
+            {
+                return selectModel;
+            }
+            set 
+            {
+                selectModel = value;
+                OnPropertyChanged();
+            }
         }
 
         //The downside of this is if it's a path it's not going to work
         //So, this is an optional string for the model if select model is checked. 
         public string ModelPath
         {
-            get;
-            set;
+            get
+            {
+                return modelPath;
+            }
+            set
+            {
+                modelPath = value;
+                OnPropertyChanged();
+            }
         }
 
         public RegressionModel Model
         {
-            get;
-            set;
+            get
+            {
+                return model;
+            }
+            set
+            {
+                model = value;
+            }
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
     }
 }
