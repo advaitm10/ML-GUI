@@ -29,6 +29,9 @@ namespace MLGui
 
         string pythonPathFileName = System.AppDomain.CurrentDomain.BaseDirectory + "pythonPath.txt";
 
+        RegressionModel model;
+
+
         LinearRegression regression;
         public MainWindow()
         {
@@ -107,51 +110,52 @@ namespace MLGui
                 //get a list of the names
                 //set model creation list sources.
 
-                RegressionModel model = new RegressionModel();
+                model = new RegressionModel();
+
                 ModelCreationPopup.Visibility = Visibility.Visible;
                 ModelCreationPopup.DataContext = model;
 
                 string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data);
 
-                string[] column1 = new string[1];
+                string[] columns = new string[1];
 
                 //reads from the python script
                 using (var reader = new StringReader(dropDownOptions))
                 {
-                    column1 = reader.ReadLine().Split(',');
+                    columns = reader.ReadLine().Split(',');
                 }
 
-                ObservableCollection<CheckableItem> checkableItemsDependent = new ObservableCollection<CheckableItem>();
-                foreach (string s in column1)
-                {
-                    CheckableItem item = new CheckableItem(s, false);
-                    checkableItemsDependent.Add(item);
-                    item.CheckedChanged += model.HandleCheckSelectionChangedDependentColumn;
-                }
-                //so, let's make a function to cut down on this duplication
-
+                //could make this a function to reduce duplication
                 ObservableCollection<CheckableItem> checkableItemsIndependentCat = new ObservableCollection<CheckableItem>();
-                foreach (string s in column1)
+                foreach (string s in columns)
                 {
                     CheckableItem item = new CheckableItem(s, false);
                     checkableItemsIndependentCat.Add(item);
                     item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCat;
                 }
-
+                
                 ObservableCollection<CheckableItem> checkableItemsIndependentCont = new ObservableCollection<CheckableItem>();
-                foreach (string s in column1)
+                foreach (string s in columns)
                 {
                     CheckableItem item = new CheckableItem(s, false);
-                    checkableItemsIndependentCat.Add(item);
+                    checkableItemsIndependentCont.Add(item);
                     item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCont;
                 }
 
-                //We'll have to subscribe to an event to get when the model is being created. 
-                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItemsIndependentCat;
-                ModelCreationPopup.DependentColumnSelector.ItemsSource = checkableItemsDependent;
+                model.CreateModelClicked += OnModelCreate;
 
+                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItemsIndependentCat;
+                ModelCreationPopup.DependentColumnSelector.ItemsSource = columns;
+                ModelCreationPopup.IndependentColumnContinuousSelector.ItemsSource = checkableItemsIndependentCont;
 
             }
+        }
+
+        void OnModelCreate()
+        {
+            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3}", 
+                regression.Data, model.DependentColumn, model.IndependentColumnsCategorical, model.IndependentColumnsContinuous));
+            
         }
 
         string RunFileAndReturnOutput(string path, string args)

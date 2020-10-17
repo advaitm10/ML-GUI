@@ -18,3 +18,5 @@ C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.pdb
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ModelCreationPage.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ModelCreationPage.baml
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.csprojAssemblyReference.cache
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\RegressionPage.g.cs
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\RegressionPage.baml

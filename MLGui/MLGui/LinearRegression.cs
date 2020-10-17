@@ -60,7 +60,6 @@ namespace MLGui
                 OnPropertyChanged();
             }
         }
-
         //This is an optional string for the model if select model is checked. 
         public string ModelPath
         {

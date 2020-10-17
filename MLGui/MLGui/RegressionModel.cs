@@ -12,29 +12,42 @@ namespace MLGui
     class RegressionModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action CreateModelClicked = delegate { };
 
-        string dependentColumns;
-        string IndependentColumnsContinuous;
-        string IndependentColumnsCategorical;
+        public string dependentColumn;
+        public string IndependentColumnsContinuous;
+        public string IndependentColumnsCategorical;
 
-        public string SelectedIndColumn
-        {
-            get;
-            set;
-        }
+        ICommand createModelCommand;
 
-        //Expects a string separated by commas
-        public string DependentColumns
+        public string DependentColumn
         {
             get
             {
-                return dependentColumns;
+                return dependentColumn;
             }
             set
             {
-                dependentColumns = value;
+                dependentColumn = value;
                 OnPropertyChanged();
             }
+        }
+
+        public ICommand CreateModel
+        {
+            get
+            {
+                if (createModelCommand == null)
+                {
+                    createModelCommand = new RelayCommand( param => createModel());
+                }
+                return createModelCommand;
+            }
+        }
+        void createModel()
+        {
+            //this function only exists so mainwindow knows when the button's been clicked
+            CreateModelClicked();
         }
 
         public void HandleCheckSelectionChangedDependentColumn(CheckableItem item)
