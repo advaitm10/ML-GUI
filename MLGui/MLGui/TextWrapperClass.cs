@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace MLGui
 {
-    public class RegressionDataPoint
+    public class TextWrapperClass
     {
-        public string[] Categorical;
-        public double[] Continuous;
+        public string Text;
+        public TextWrapperClass(string text)
+        {
+            Text = text;
+        }
     }
 }

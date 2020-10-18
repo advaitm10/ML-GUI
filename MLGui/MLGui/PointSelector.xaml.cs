@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,10 +17,27 @@ namespace MLGui
 {
     public partial class PointSelector : Window
     {
-        public PointSelector()
+        ObservableCollection<TextWrapperClass> Categoricals = new ObservableCollection<TextWrapperClass>();
+        ObservableCollection<TextWrapperClass> Continuous = new ObservableCollection<TextWrapperClass>();
+        public PointSelector(int numOfCats, int numOfCont) //what does this take in? It just needs the number of each I believe
         {
             InitializeComponent();
-            
+         
+            for (int i = 0; i < numOfCats; i++)
+            {
+                Categoricals.Add(new TextWrapperClass(""));
+            }
+
+            for (int i = 0; i < numOfCont; i++)
+            {
+                Continuous.Add(new TextWrapperClass(""));
+            }
+
+            CategoricalSelection.ItemsSource = Categoricals;
+            ContinuousSelection.ItemsSource = Continuous;
         }
+
+        //actually we can just run the python script here, as long as we make that function static. 
+
     }
 }

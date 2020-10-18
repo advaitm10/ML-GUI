@@ -5,36 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MLGui"
         mc:Ignorable="d"
-        Title="PointSelector" Height="400" Width="400">
+        Title="PointSelector" Height="500" Width="400">
     <Grid>
-        
         <Grid.RowDefinitions>
+            <RowDefinition Height=".15*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height=".15*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height=".15*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer>
+        <TextBlock Text="Categorical Input" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" TextDecorations="Underline"/>
+        <ScrollViewer Grid.Row="1">
             <ItemsControl x:Name="CategoricalSelection">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Height="50">
-                            <ComboBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" MinWidth="200" ItemsSource="{Binding Categories}"/>
+                            <TextBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" MinWidth="200" Text="{Binding Text}"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <ScrollViewer>
+        <ScrollViewer Grid.Row="3">
             <ItemsControl x:Name="ContinuousSelection">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Height="50">
-                            <TextBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" MinWidth="200" Text="{Binding Content}"/>
+                            <TextBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" MinWidth="200" Text="{Binding Text}"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        
-        <Button Grid.Row="1" Content="Predict Point" FontSize="20"/>
+        <TextBlock Text="Continuous Input" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Grid.Row="2" TextDecorations="Underline"/>
+
+        <Button Grid.Row="10" Content="Predict Point" FontSize="20"/>
     </Grid>
 </Window>
