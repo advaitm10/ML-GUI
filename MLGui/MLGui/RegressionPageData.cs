@@ -13,7 +13,7 @@ namespace MLGui
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public event Action<string> PredictPointEvent = delegate { };
+        public event Action PredictPointEvent = delegate { };
         public event Action PlotPredictionEvent = delegate { };
 
         string accuracy;
@@ -41,7 +41,7 @@ namespace MLGui
             {
                 if (predictPointCommand == null)
                 {
-                    predictPointCommand = new RelayCommand(param => PredictPointEvent(Point));
+                    predictPointCommand = new RelayCommand(param => PredictPointEvent());
                 }
                 return predictPointCommand;
             }

@@ -97,7 +97,7 @@ namespace MLGui
                 ModelCreationPopup.Visibility = Visibility.Visible;
                 ModelCreationPopup.DataContext = model;
 
-                string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data);
+                string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data, pythonPath);
 
                 string[] columns = new string[1];
 
@@ -144,7 +144,7 @@ namespace MLGui
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
 
             string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3} {4}", 
-                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles), pythonPath);
 
             Console.WriteLine("result before split: " + result);
 
@@ -219,9 +219,12 @@ namespace MLGui
             return splitInput[splitInput.Length - 2];
         }
 
-        void PredictPoint(string input)
+        void PredictPoint()
         {
-            
+            int conts = model.IndependentColumnsContinuous.Split(',').Length - 1; //extra comma
+            int cats = model.IndependentColumnsCategorical.Split(',').Length - 1; //extra comma
+            PointSelector selector = new PointSelector(cats, conts, pythonPath);
+            selector.ShowDialog();
         }
 
         void PlotPrediction()
@@ -229,7 +232,7 @@ namespace MLGui
 
         }
 
-        string RunFileAndReturnOutput(string path, string args)
+        public static string RunFileAndReturnOutput(string path, string args, string pythonPath)
         {
             path.Trim();
             args.Trim();

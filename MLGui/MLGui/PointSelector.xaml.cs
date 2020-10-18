@@ -19,10 +19,14 @@ namespace MLGui
     {
         ObservableCollection<TextWrapperClass> Categoricals = new ObservableCollection<TextWrapperClass>();
         ObservableCollection<TextWrapperClass> Continuous = new ObservableCollection<TextWrapperClass>();
-        public PointSelector(int numOfCats, int numOfCont) //what does this take in? It just needs the number of each I believe
+        string PythonPath;
+
+        public PointSelector(int numOfCats, int numOfCont, string pythonPath) //what does this take in? It just needs the number of each I believe
         {
             InitializeComponent();
-         
+
+            PythonPath = pythonPath;
+
             for (int i = 0; i < numOfCats; i++)
             {
                 Categoricals.Add(new TextWrapperClass(""));
@@ -35,6 +39,11 @@ namespace MLGui
 
             CategoricalSelection.ItemsSource = Categoricals;
             ContinuousSelection.ItemsSource = Continuous;
+        }
+
+        private void PredictPointButton_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         //actually we can just run the python script here, as long as we make that function static. 
