@@ -21,9 +21,13 @@
             <ColumnDefinition Width=".2*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Text="Model Created!" Foreground="Green" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" FontSize="35"/>
-        <TextBlock  Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" FontSize="25">
+        <TextBlock  Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,15,0,0" FontSize="25">
             <Run Text="Training Loss: "/>
             <Run Text="{Binding TrainingLoss}"/>
+        </TextBlock>
+        <TextBlock  Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="20,15,0,0" FontSize="25">
+            <Run Text="Prediction: "/>
+            <Run Text="{Binding Prediction}"/>
         </TextBlock>
         <TextBlock Grid.Column="1" Grid.Row="2" Margin="20,15,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="25">
             <Run Text="Accuracy: "/>

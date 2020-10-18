@@ -57,6 +57,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CheckableItem.cs" />
+    <Compile Include="ClassificationModel.cs" />
+    <Compile Include="ClassificationPage.xaml.cs">
+      <DependentUpon>ClassificationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LinearRegression.cs" />
     <Compile Include="ModelCreationPage.xaml.cs">
       <DependentUpon>ModelCreationPage.xaml</DependentUpon>
@@ -75,6 +79,10 @@
     </Compile>
     <Compile Include="StartMenuModel.cs" />
     <Compile Include="TextWrapperClass.cs" />
+    <Page Include="ClassificationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

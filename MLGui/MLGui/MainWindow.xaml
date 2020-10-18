@@ -36,7 +36,7 @@
                     <Button x:Name="SelectDataButton" Width="40" Height="20" Grid.Row="1" Content="..." FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,200,0" Click="SelectDataButton_Click"/>
 
                     <ComboBox Name="RegressionSelection" Grid.Row="2" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Center" MinHeight="30" MinWidth="250">
-                        <ComboBoxItem HorizontalAlignment="Center">
+                        <ComboBoxItem HorizontalAlignment="Center" IsSelected="True">
                             <TextBlock Text="Regression" TextAlignment="Center" FontSize="25"/>
                         </ComboBoxItem>
                         <ComboBoxItem HorizontalAlignment="Center">
@@ -61,6 +61,8 @@
                     
                     <local:ModelCreationPage Grid.RowSpan="100" Visibility="Collapsed" x:Name="ModelCreationPopup"/>
                     <local:RegressionPage Visibility="Collapsed" Grid.RowSpan="100" x:Name="RegressionPagePopup"/>
+                    <local:ClassificationPage Grid.RowSpan="100" x:Name="ClassificationPagePopup" Visibility="Collapsed"/>
+
                 </Grid>
             </TabItem>
             <!-- 

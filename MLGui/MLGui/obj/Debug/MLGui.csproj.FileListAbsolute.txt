@@ -17,8 +17,9 @@ C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.exe
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.pdb
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ModelCreationPage.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ModelCreationPage.baml
-C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\MLGui.csprojAssemblyReference.cache
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\RegressionPage.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\RegressionPage.baml
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\PointSelector.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\PointSelector.baml
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ClassificationPage.g.cs
+C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ClassificationPage.baml

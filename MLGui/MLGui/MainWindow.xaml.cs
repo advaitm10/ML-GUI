@@ -31,6 +31,7 @@ namespace MLGui
 
         string pythonPathFileName = System.AppDomain.CurrentDomain.BaseDirectory + "pythonPath.txt";
 
+        ClassificationModel cmodel = new ClassificationModel();
         RegressionModel model;
 
         LinearRegression regression;
@@ -40,29 +41,32 @@ namespace MLGui
             regression = new LinearRegression();
             regression = new LinearRegression();
             RegressionTab.DataContext = regression;
+
             if (File.Exists(pythonPathFileName))
             {
                 using (StreamReader reader = new StreamReader(pythonPathFileName))
                 {
                     pythonPath = reader.ReadToEnd();
-                } 
-            } else
+                }
+            }
+            else
             {
                 PromptPythonInstall();
             }
         }
-        
+
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        
+
         private void DirectorySelectorButton_Click(object sender, RoutedEventArgs e)
         {
             using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                    regression.Directory = folderBrowserDialog.SelectedPath;    
+                if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    regression.Directory = folderBrowserDialog.SelectedPath;
                 }
             }
         }
@@ -74,6 +78,7 @@ namespace MLGui
             if (fileDialog.ShowDialog() == true)
             {
                 regression.Data = fileDialog.FileName;
+                cmodel.Data = fileDialog.FileName;
             }
         }
 
@@ -91,51 +96,92 @@ namespace MLGui
         {
             if (!regression.SelectModel)
             {
-                model = new RegressionModel();
-
-                ModelCreationPopup.Visibility = Visibility.Visible;
-                ModelCreationPopup.DataContext = model;
-
-                model.PredictPointEvent += PredictPoint;
-
-                string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data, pythonPath);
-
-                string[] columns = new string[1];
-
-                //reads from the python script
-                using (var reader = new StringReader(dropDownOptions))
+                if (RegressionSelection.SelectedIndex == 0)
                 {
-                    columns = reader.ReadLine().Split(',');
-                }
 
-                //could make this a function to reduce duplication
-                ObservableCollection<CheckableItem> checkableItemsIndependentCat = new ObservableCollection<CheckableItem>();
-                foreach (string s in columns)
+                    model = new RegressionModel();
+
+                    ModelCreationPopup.Visibility = Visibility.Visible;
+                    ModelCreationPopup.DataContext = model;
+
+                    model.PredictPointEvent += PredictPoint;
+
+                    string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data, pythonPath);
+
+                    string[] columns = new string[1];
+
+                    //reads from the python script
+                    using (var reader = new StringReader(dropDownOptions))
+                    {
+                        columns = reader.ReadLine().Split(',');
+                    }
+
+                    //could make this a function to reduce duplication
+                    ObservableCollection<CheckableItem> checkableItemsIndependentCat = new ObservableCollection<CheckableItem>();
+                    foreach (string s in columns)
+                    {
+                        CheckableItem item = new CheckableItem(s, false);
+                        checkableItemsIndependentCat.Add(item);
+                        item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCat;
+                    }
+
+                    ObservableCollection<CheckableItem> checkableItemsIndependentCont = new ObservableCollection<CheckableItem>();
+                    foreach (string s in columns)
+                    {
+                        CheckableItem item = new CheckableItem(s, false);
+                        checkableItemsIndependentCont.Add(item);
+                        item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCont;
+                    }
+
+                    model.CreateModelClicked += OnModelCreate;
+
+                    ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItemsIndependentCat;
+                    ModelCreationPopup.DependentColumnSelector.ItemsSource = columns;
+                    ModelCreationPopup.IndependentColumnContinuousSelector.ItemsSource = checkableItemsIndependentCont;
+
+                } else if (RegressionSelection.SelectedIndex == 1)
                 {
-                    CheckableItem item = new CheckableItem(s, false);
-                    checkableItemsIndependentCat.Add(item);
-                    item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCat;
+                    CreateClassificationModel();
                 }
-                
-                ObservableCollection<CheckableItem> checkableItemsIndependentCont = new ObservableCollection<CheckableItem>();
-                foreach (string s in columns)
-                {
-                    CheckableItem item = new CheckableItem(s, false);
-                    checkableItemsIndependentCont.Add(item);
-                    item.CheckedChanged += model.HandleCheckSelectionChangedIndependentColumnCont;
-                }
-
-                model.CreateModelClicked += OnModelCreate;
-
-                ModelCreationPopup.IndependentCategoricalColumnSelector.ItemsSource = checkableItemsIndependentCat;
-                ModelCreationPopup.DependentColumnSelector.ItemsSource = columns;
-                ModelCreationPopup.IndependentColumnContinuousSelector.ItemsSource = checkableItemsIndependentCont;
-
             }
         }
 
+        void CreateClassificationModel()
+        {
+            cmodel = new ClassificationModel();
+
+            ClassificationPagePopup.Visibility = Visibility.Visible;
+
+            string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", cmodel.Data, pythonPath);
+
+            string[] columns = new string[1];
+
+            //reads from the python script
+            using (var reader = new StringReader(dropDownOptions))
+            {
+                columns = reader.ReadLine().Split(',');
+            }
+
+            ClassificationPagePopup.LabelColumnNameSelector.ItemsSource = columns;
+            ClassificationPagePopup.TextColumnNameSelector.ItemsSource = columns;
+
+            cmodel.ContinueClickedEvent += ContinueButtonClicked;
+        }
+        void ContinueButtonClicked()
+        {
+            cmodel.LabelColumn = (string)ClassificationPagePopup.LabelColumnNameSelector.SelectedItem;
+            cmodel.TextColumn = (string)ClassificationPagePopup.LabelColumnNameSelector.SelectedItem;
+
+            string args = String.Format("{0} {1} {2} {3} {4} {5}",
+                cmodel.Data, cmodel.TextColumn, cmodel.LabelColumn, cmodel.Text);
+
+            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py",
+                args, pythonPath);
+
+            Console.WriteLine("result before split: " + result);
+        }
         //so, this function actually calls the regression method. 
-        void OnModelCreate() 
+        void OnModelCreate()
         {
             Console.WriteLine("clicked model create button");
 
@@ -146,38 +192,45 @@ namespace MLGui
             Console.WriteLine(String.Format("{0} {1} {2} {3} {4}",
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
 
-            //so, if the point exists, so just check model.continuous
+            //so, if the point exists, so just check model.columnandvalue
             string args = "";
 
             string fileName = "point.csv";
 
+            int shouldPlot = model.Plot ? 1 : 0;
+
             if (model.ColumnAndValue == null)
             {
                 args = String.Format("{0} {1} {2} {3} {4} {5}",
-                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, model.Plot);
-            } else
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, shouldPlot);
+            }
+            else
             {
                 args = String.Format("{0} {1} {2} {3} {4} {5} {6}",
-                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, model.Plot, 
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, shouldPlot,
                 fileName);
             }
-            
+
             Console.WriteLine("args: " + args);
 
-            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", 
+            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py",
                 args, pythonPath);
 
             Console.WriteLine("result before split: " + result);
-            
+
+            string prediction = "";
+
+            prediction = GetLastValueInResult(result);
+
             result = GetLastResultLine(result);
 
             ModelCreationPopup.Visibility = Visibility.Collapsed;
 
-            SetUpRegressionPage(result);
-            
+            SetUpRegressionPage(result, prediction);
+
         }
 
-               void SetUpRegressionPage(string result)
+        void SetUpRegressionPage(string result, string prediction)
         {
             RegressionPagePopup.Visibility = Visibility.Visible;
 
@@ -188,16 +241,17 @@ namespace MLGui
 
             regressionData.Accuracy = values[3];
             regressionData.TrainingLoss = values[1];
+            regressionData.Prediction = prediction;
 
             Console.WriteLine("result: " + result);
         }
-
+        
         List<string> ExtractValuesFromRegressionResult(string regResult)
         {
             List<string> result = new List<string>();
 
             regResult.Trim();
-
+            
             char lastChar = ' ';
 
             string word = "";
@@ -208,7 +262,8 @@ namespace MLGui
                 {
                     result.Add(word);
                     word = "";
-                } else if (nextChar != ' ' && lastChar == ' ' || lastChar != ' ' && nextChar != ' ')
+                }
+                else if (nextChar != ' ' && lastChar == ' ' || lastChar != ' ' && nextChar != ' ')
                 {
                     word += regResult[i];
                 }
@@ -222,6 +277,22 @@ namespace MLGui
 
             return result;
         }
+        string GetLastValueInResult(string result)
+        {
+            string ans = "";
+            for (int i = result.Length - 2; i >= 0; i--)
+            {
+                int nextChar = result[i - 1];
+                if (nextChar == ' ')
+                {
+                    return ans;
+                } else
+                {
+                    ans = result[i] + ans;
+                }
+            }
+            return ans;
+        }
 
         string GetLastResultLine(string input)
         {
@@ -229,14 +300,14 @@ namespace MLGui
             string[] splitInput = input.Split('\n');
 
             Console.WriteLine("Length: " + splitInput.Length);
-            
+
             for (int i = 0; i < splitInput.Length; i++)
             {
                 Console.WriteLine(splitInput[i] + "; " + i);
             }
-            return splitInput[splitInput.Length - 2];
+            return splitInput[splitInput.Length - 4];
         }
-        
+
         void PredictPoint()
         {
             string categorical = model.IndependentColumnsCategorical.Substring(0, model.IndependentColumnsCategorical.Length - 1);
@@ -251,7 +322,7 @@ namespace MLGui
         void SetColumnAndValue(ObservableCollection<TextWrapperClass> columnAndVal)
         {
             model.ColumnAndValue = columnAndVal;
-            WritePointToCSV();   
+            WritePointToCSV();
         }
 
         void WritePointToCSV()
@@ -299,7 +370,7 @@ namespace MLGui
             path.Trim();
             args.Trim();
             path += " " + args;
-            
+
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = pythonPath;
             start.Arguments = path;

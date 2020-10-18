@@ -18,9 +18,28 @@ namespace MLGui
 
         string accuracy;
         string trainingLoss;
+        string prediction;
 
         ICommand predictPointCommand;
         ICommand plotPredictionCommand;
+
+        public RegressionPageData()
+        {
+            prediction = "n/a";
+        }
+
+        public string Prediction
+        {
+            get
+            {
+                return prediction;
+            }
+            set
+            {
+                prediction = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Accuracy
         {
