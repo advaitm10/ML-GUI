@@ -46,8 +46,6 @@ learn.fit_one_cycle(cycles)
 learn.path = Path('.')
 learn.export("export.pkl")
 
-print("bruh")
-
 if(plot == "1"):
     preds, targs = learn.get_preds(with_loss=False)
 
@@ -63,6 +61,7 @@ if(plot == "1"):
     plt.show()
 
 if(point != None):
+    print("bruh")
     df = pd.read_csv("point.csv")
     row, clas, probs = learn.predict(df.iloc[0])
     print(row)
