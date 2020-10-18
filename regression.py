@@ -10,6 +10,9 @@ import pandas as pd
      Notes: Figure out how to allow user to use their own model
 '''
 
+# pd.categorify
+# DataFrame.dropna
+
 #take in data file paths using system args
 args = sys.argv
 datapath = args[1]
