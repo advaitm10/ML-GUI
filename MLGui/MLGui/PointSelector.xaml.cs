@@ -17,7 +17,7 @@ namespace MLGui
 {
     public partial class PointSelector : Window
     {
-        public event Action<string, string> SetCatsAndConts = delegate { };
+        public event Action<ObservableCollection<TextWrapperClass>> SetColumnAndValue = delegate { };
         
         ObservableCollection<TextWrapperClass> Categoricals = new ObservableCollection<TextWrapperClass>();
         ObservableCollection<TextWrapperClass> Continuous = new ObservableCollection<TextWrapperClass>();
@@ -50,30 +50,14 @@ namespace MLGui
             ContinuousSelection.ItemsSource = Continuous;
         }
 
-        string GetCSV(ObservableCollection<TextWrapperClass> input)
-        {
-            //probably do commas between continuous and categoricals and spaces between the start of conditionals and categoricals
-            string result = "";
-            for (int i = 0; i < input.Count; i++)
-            {
-                if (i != input.Count - 1)
-                {
-                    result += input[i].Text + ",";
-                } else
-                {
-                    result += input[i].Text;
-                }
-            }
-            return result;
-        }
-        
         private void PredictPointButton_Click(object sender, RoutedEventArgs e)
         {
-            string csvCont = GetCSV(Continuous);
-            string csvCat = GetCSV(Categoricals);
-            csvCat.Trim();
-            csvCont.Trim();
-            SetCatsAndConts(csvCat, csvCont);
+            foreach (TextWrapperClass wrapper in Continuous)
+            {
+                Categoricals.Add(wrapper);
+            }
+
+            SetColumnAndValue(Categoricals);
             this.Close();
         }
     }

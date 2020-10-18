@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -25,22 +26,7 @@ namespace MLGui
 
         int cycles;
 
-        string catsPoints;
-
-        public string CategoricalsPoint
-        {
-            get
-            {
-                return catsPoints;
-            }
-            set
-            {
-                catsPoints = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string ContinuousPoint
+        public ObservableCollection<TextWrapperClass> ColumnAndValue
         {
             get;
             set;

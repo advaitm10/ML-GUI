@@ -56,12 +56,11 @@ namespace MLGui
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
+        
         private void DirectorySelectorButton_Click(object sender, RoutedEventArgs e)
         {
             using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-
                 if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     regression.Directory = folderBrowserDialog.SelectedPath;    
                 }
@@ -150,9 +149,9 @@ namespace MLGui
             //so, if the point exists, so just check model.continuous
             string args = "";
 
-            string fileName = "";
+            string fileName = "point.csv";
 
-            if (String.IsNullOrEmpty(model.ContinuousPoint))
+            if (model.ColumnAndValue == null)
             {
                 args = String.Format("{0} {1} {2} {3} {4} {5}",
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, model.Plot);
@@ -178,15 +177,7 @@ namespace MLGui
             
         }
 
-        void WritePointToCSV()
-        {
-            //model.CategoricalsPoint + "," + model.ContinuousPoint;
-            //so, I already have the model. That means this shouldn't be that difficult. 
-            //Hm. 
-
-        }
-
-        void SetUpRegressionPage(string result)
+               void SetUpRegressionPage(string result)
         {
             RegressionPagePopup.Visibility = Visibility.Visible;
 
@@ -252,15 +243,56 @@ namespace MLGui
             string continuous = model.IndependentColumnsContinuous.Substring(0, model.IndependentColumnsContinuous.Length - 1);
 
             PointSelector selector = new PointSelector(categorical, continuous, pythonPath);
-            selector.SetCatsAndConts += SetCatsAndConts;
+            selector.SetColumnAndValue += SetColumnAndValue;
             selector.ShowDialog();
         }
-        
-        void SetCatsAndConts(string cats, string conts)
+
+        //this also means that the window closed
+        void SetColumnAndValue(ObservableCollection<TextWrapperClass> columnAndVal)
         {
-            model.CategoricalsPoint = cats;
-            model.ContinuousPoint = conts;
+            model.ColumnAndValue = columnAndVal;
+            WritePointToCSV();   
         }
+
+        void WritePointToCSV()
+        {
+            //model.CategoricalsPoint + "," + model.ContinuousPoint;
+            //so, I already have the model. That means this shouldn't be that difficult. 
+            //Hm. 
+            //alright, so each value already has a column. 
+            //Hm. There's only one point, right? So it should be fine. We just loop through twice
+
+            string output = "";
+            for (int i = 0; i < model.ColumnAndValue.Count; i++)
+            {
+                if (i != model.ColumnAndValue.Count - 1)
+                {
+                    output += model.ColumnAndValue[i].Column + ",";
+                }
+                else
+                {
+                    output += model.ColumnAndValue[i].Column;
+                }
+            }
+            output += "\n";
+            for (int i = 0; i < model.ColumnAndValue.Count; i++)
+            {
+                if (i != model.ColumnAndValue.Count - 1)
+                {
+                    output += model.ColumnAndValue[i].Text + ",";
+                }
+                else
+                {
+                    output += model.ColumnAndValue[i].Text;
+                }
+            }
+
+            File.WriteAllText(System.AppDomain.CurrentDomain.BaseDirectory + "point.csv", output);
+
+
+        }
+
+
 
         public static string RunFileAndReturnOutput(string path, string args, string pythonPath)
         {
@@ -301,6 +333,5 @@ namespace MLGui
                 }
             }
         }
-
     }
 }
