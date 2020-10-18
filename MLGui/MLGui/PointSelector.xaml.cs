@@ -17,26 +17,33 @@ namespace MLGui
 {
     public partial class PointSelector : Window
     {
+        public event Action<string, string> SetCatsAndConts = delegate { };
+        
         ObservableCollection<TextWrapperClass> Categoricals = new ObservableCollection<TextWrapperClass>();
         ObservableCollection<TextWrapperClass> Continuous = new ObservableCollection<TextWrapperClass>();
         string PythonPath;
 
         string pointScriptFilePath = System.AppDomain.CurrentDomain.BaseDirectory + "CalculatePoint.py";
 
-        public PointSelector(int numOfCats, int numOfCont, string pythonPath) //what does this take in? It just needs the number of each I believe
+        public PointSelector(string categoricalCategories, string continuousCategories, string pythonPath) //what does this take in? It just needs the number of each I believe
         {
             InitializeComponent();
 
             PythonPath = pythonPath;
 
-            for (int i = 0; i < numOfCats; i++)
+            //so, we're going to need columns in order.
+
+            string[] Conts = continuousCategories.Split(',');
+            string[] Cats = categoricalCategories.Split(',');
+
+            for (int i = 0; i < Cats.Length; i++)
             {
-                Categoricals.Add(new TextWrapperClass(""));
+                Categoricals.Add(new TextWrapperClass("", Cats[i]));
             }
 
-            for (int i = 0; i < numOfCont; i++)
+            for (int i = 0; i < Conts.Length; i++)
             {
-                Continuous.Add(new TextWrapperClass(""));
+                Continuous.Add(new TextWrapperClass("", Conts[i]));
             }
 
             CategoricalSelection.ItemsSource = Categoricals;
@@ -45,7 +52,7 @@ namespace MLGui
 
         string GetCSV(ObservableCollection<TextWrapperClass> input)
         {
-            //probably do commas between conditionals and categoricals and spaces between the start of conditionals and categoricals
+            //probably do commas between continuous and categoricals and spaces between the start of conditionals and categoricals
             string result = "";
             for (int i = 0; i < input.Count; i++)
             {
@@ -59,16 +66,15 @@ namespace MLGui
             }
             return result;
         }
-
+        
         private void PredictPointButton_Click(object sender, RoutedEventArgs e)
         {
             string csvCont = GetCSV(Continuous);
             string csvCat = GetCSV(Categoricals);
             csvCat.Trim();
             csvCont.Trim();
-            MainWindow.RunFileAndReturnOutput(pointScriptFilePath, csvCat + " " + csvCont, PythonPath);
-            //shouldn't need to capture output
+            SetCatsAndConts(csvCat, csvCont);
+            this.Close();
         }
-
     }
 }

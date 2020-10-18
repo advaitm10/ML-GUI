@@ -39,6 +39,6 @@
         </ScrollViewer>
         <TextBlock Text="Continuous Input" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Grid.Row="2" TextDecorations="Underline"/>
 
-        <Button Grid.Row="10" Content="Predict Point" FontSize="20" Name="PredictPointButton" Click="PredictPointButton_Click"/>
+        <Button Grid.Row="10" Content="Add Point" FontSize="20" Name="PredictPointButton" Click="PredictPointButton_Click"/>
     </Grid>
 </Window>

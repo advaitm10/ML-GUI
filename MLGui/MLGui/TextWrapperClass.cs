@@ -13,9 +13,15 @@ namespace MLGui
             get;
             set;
         }
-        public TextWrapperClass(string text)
+        public string Column
+        {
+            get;
+            set;
+        }
+        public TextWrapperClass(string text, string column)
         {
             Text = text;
+            Column = column;
         }
     }
 }

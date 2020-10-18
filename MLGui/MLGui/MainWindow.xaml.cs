@@ -97,6 +97,8 @@ namespace MLGui
                 ModelCreationPopup.Visibility = Visibility.Visible;
                 ModelCreationPopup.DataContext = model;
 
+                model.PredictPointEvent += PredictPoint;
+
                 string dropDownOptions = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "get-column-options.py", regression.Data, pythonPath);
 
                 string[] columns = new string[1];
@@ -132,28 +134,56 @@ namespace MLGui
 
             }
         }
-        
-        void OnModelCreate()
+
+        //so, this function actually calls the regression method. 
+        void OnModelCreate() 
         {
             Console.WriteLine("clicked model create button");
-            
+
+            //these are columns
             string categorical = model.IndependentColumnsCategorical.Substring(0, model.IndependentColumnsCategorical.Length - 1);
             string continuous = model.IndependentColumnsContinuous.Substring(0, model.IndependentColumnsContinuous.Length - 1);
 
             Console.WriteLine(String.Format("{0} {1} {2} {3} {4}",
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
 
-            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3} {4}", 
-                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles), pythonPath);
+            //so, if the point exists, so just check model.continuous
+            string args = "";
+
+            string fileName = "";
+
+            if (String.IsNullOrEmpty(model.ContinuousPoint))
+            {
+                args = String.Format("{0} {1} {2} {3} {4} {5}",
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, model.Plot);
+            } else
+            {
+                args = String.Format("{0} {1} {2} {3} {4} {5} {6}",
+                regression.Data, model.DependentColumn, categorical, continuous, model.Cycles, model.Plot, 
+                fileName);
+            }
+            
+            Console.WriteLine("args: " + args);
+
+            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", 
+                args, pythonPath);
 
             Console.WriteLine("result before split: " + result);
-
+            
             result = GetLastResultLine(result);
 
             ModelCreationPopup.Visibility = Visibility.Collapsed;
 
             SetUpRegressionPage(result);
             
+        }
+
+        void WritePointToCSV()
+        {
+            //model.CategoricalsPoint + "," + model.ContinuousPoint;
+            //so, I already have the model. That means this shouldn't be that difficult. 
+            //Hm. 
+
         }
 
         void SetUpRegressionPage(string result)
@@ -169,9 +199,6 @@ namespace MLGui
             regressionData.TrainingLoss = values[1];
 
             Console.WriteLine("result: " + result);
-
-            regressionData.PlotPredictionEvent += PlotPrediction;
-            regressionData.PredictPointEvent += PredictPoint;
         }
 
         List<string> ExtractValuesFromRegressionResult(string regResult)
@@ -218,18 +245,21 @@ namespace MLGui
             }
             return splitInput[splitInput.Length - 2];
         }
-
+        
         void PredictPoint()
         {
-            int conts = model.IndependentColumnsContinuous.Split(',').Length - 1; //extra comma
-            int cats = model.IndependentColumnsCategorical.Split(',').Length - 1; //extra comma
-            PointSelector selector = new PointSelector(cats, conts, pythonPath);
+            string categorical = model.IndependentColumnsCategorical.Substring(0, model.IndependentColumnsCategorical.Length - 1);
+            string continuous = model.IndependentColumnsContinuous.Substring(0, model.IndependentColumnsContinuous.Length - 1);
+
+            PointSelector selector = new PointSelector(categorical, continuous, pythonPath);
+            selector.SetCatsAndConts += SetCatsAndConts;
             selector.ShowDialog();
         }
-
-        void PlotPrediction()
+        
+        void SetCatsAndConts(string cats, string conts)
         {
-
+            model.CategoricalsPoint = cats;
+            model.ContinuousPoint = conts;
         }
 
         public static string RunFileAndReturnOutput(string path, string args, string pythonPath)

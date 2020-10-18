@@ -5,13 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MLGui"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="525" Width="800">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BTVC"/>
     </Window.Resources>
     
     <Grid>
-        
         <TabControl TabStripPlacement="Left">
             <TabItem Name="RegressionTab">
                 <TabItem.Header>
@@ -24,6 +23,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                     </Grid.ColumnDefinitions>
@@ -31,12 +31,21 @@
                     <TextBox x:Name="DirectorySelectorText" Grid.Row="0" HorizontalAlignment="Center" Width="180" Height="20" VerticalAlignment="Bottom" Margin="0,0,30,0" Text="{Binding Directory}"/>
                     <Button x:Name="DirectorySelectorButton" Width="40" Height="20" Grid.Row="0" Content="..." FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,200,0" Click="DirectorySelectorButton_Click"/>
 
-                    <TextBlock Grid.Row="1" Text="Choose Data" HorizontalAlignment="Center" FontSize="35" VerticalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock Grid.Row="1" Text="Choose Data" HorizontalAlignment="Center" FontSize="35" VerticalAlignment="Center" Margin="0,0,0,15"/>
                     <TextBox x:Name="DataSelectorText" Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Data}" Width="180" Height="20" VerticalAlignment="Bottom" Margin="0,0,30,0"/>
                     <Button x:Name="SelectDataButton" Width="40" Height="20" Grid.Row="1" Content="..." FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,200,0" Click="SelectDataButton_Click"/>
 
-                    <TextBlock Text="Choose Model?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" FontSize="30" Margin="0,0,0,0"/>
-                    <CheckBox Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,-250,0" Name="ChooseModelCheckBox" IsChecked="{Binding SelectModel}">
+                    <ComboBox Name="RegressionSelection" Grid.Row="2" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Center" MinHeight="30" MinWidth="250">
+                        <ComboBoxItem HorizontalAlignment="Center">
+                            <TextBlock Text="Regression" TextAlignment="Center" FontSize="25"/>
+                        </ComboBoxItem>
+                        <ComboBoxItem HorizontalAlignment="Center">
+                            <TextBlock Text="NLP Classifier" FontSize="25"/>
+                        </ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBlock Text="Choose Model?" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" FontSize="30" Margin="0,0,0,0"/>
+                    <CheckBox Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,-250,0" Name="ChooseModelCheckBox" IsChecked="{Binding SelectModel}">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
                          </CheckBox.LayoutTransform>
@@ -46,17 +55,22 @@
                     <TextBox x:Name="ModelSelectorText" Text="{Binding ModelPath}" Grid.Row="3" HorizontalAlignment="Center" Width="180" Height="20" VerticalAlignment="Center" Margin="0,20,30,0" Visibility="{Binding ElementName=ChooseModelCheckBox, Path=IsChecked, Converter={StaticResource BTVC}}"/>
                     <Button x:Name="SelectModelButton" Width="40" Height="20" Grid.Row="3" Content="..." FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,200,0" Visibility="{Binding ElementName=ChooseModelCheckBox, Path=IsChecked, Converter={StaticResource BTVC}}" Click="SelectModelButton_Click"/>
                     
-                    <Button x:Name="ContinueButton" Content="Continue" FontSize="30" Grid.Row="4" Width="180" Height="50" Click="ContinueButton_Click"/>
+                    <Button x:Name="ContinueButton" Content="Continue" FontSize="30" Grid.Row="5" Width="180" Height="50" Click="ContinueButton_Click"/>
 
+                    
+                    
                     <local:ModelCreationPage Grid.RowSpan="100" Visibility="Collapsed" x:Name="ModelCreationPopup"/>
                     <local:RegressionPage Visibility="Collapsed" Grid.RowSpan="100" x:Name="RegressionPagePopup"/>
                 </Grid>
             </TabItem>
+            <!-- 
             <TabItem Name="ClassificationTab">
                 <TabItem.Header>
                     <TextBlock Text="Classification" FontSize="20"/>
                 </TabItem.Header>
+
             </TabItem>
+            -->
         </TabControl>
         <local:StartMenu Visibility="Collapsed"/>
     </Grid>

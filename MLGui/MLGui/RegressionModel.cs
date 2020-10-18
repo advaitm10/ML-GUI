@@ -13,6 +13,7 @@ namespace MLGui
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action CreateModelClicked = delegate { };
+        public event Action PredictPointEvent;
 
         public string dependentColumn;
         public string IndependentColumnsContinuous;
@@ -20,7 +21,30 @@ namespace MLGui
 
         ICommand createModelCommand;
 
+        ICommand predictPointCommand;
+
         int cycles;
+
+        string catsPoints;
+
+        public string CategoricalsPoint
+        {
+            get
+            {
+                return catsPoints;
+            }
+            set
+            {
+                catsPoints = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ContinuousPoint
+        {
+            get;
+            set;
+        }
 
         public int Cycles
         {
@@ -60,6 +84,25 @@ namespace MLGui
                 return createModelCommand;
             }
         }
+
+        public ICommand PredictPoint
+        {
+            get
+            {
+                if (predictPointCommand == null)
+                {
+                    predictPointCommand = new RelayCommand(param => PredictPointEvent());
+                }
+                return predictPointCommand;
+            }
+        }
+
+        public bool Plot
+        {
+            get;
+            set;
+        }
+
         void createModel()
         {
             //this function only exists so mainwindow knows when the button's been clicked
