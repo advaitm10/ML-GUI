@@ -146,7 +146,7 @@ namespace MLGui
             string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3} {4}", 
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
 
-            result = GetLastResultLine(result);
+            //result = GetLastResultLine(result);
 
             ModelCreationPopup.Visibility = Visibility.Collapsed;
 
@@ -165,7 +165,7 @@ namespace MLGui
 
         string GetLastResultLine(string input)
         {
-            return input.Split('\n').Last();
+            return input.Split('\n')[0];
         }
 
         void PredictPoint(string input)
