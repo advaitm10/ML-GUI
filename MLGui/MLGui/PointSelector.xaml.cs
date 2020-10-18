@@ -14,14 +14,12 @@ using System.Windows.Shapes;
 
 namespace MLGui
 {
-    /// <summary>
-    /// Interaction logic for PointSelector.xaml
-    /// </summary>
     public partial class PointSelector : Window
     {
         public PointSelector()
         {
             InitializeComponent();
+            
         }
     }
 }

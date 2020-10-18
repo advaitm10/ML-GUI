@@ -7,14 +7,34 @@
         mc:Ignorable="d"
         Title="PointSelector" Height="400" Width="400">
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height=".15*"/>
         </Grid.RowDefinitions>
         <ScrollViewer>
-            <ItemsControl>
+            <ItemsControl x:Name="CategoricalSelection">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="50">
+                            <ComboBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" MinWidth="200" ItemsSource="{Binding Categories}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+        <ScrollViewer>
+            <ItemsControl x:Name="ContinuousSelection">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="50">
+                            <TextBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="30" MinWidth="200" Text="{Binding Content}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
         <Button Grid.Row="1" Content="Predict Point" FontSize="20"/>
     </Grid>
 </Window>

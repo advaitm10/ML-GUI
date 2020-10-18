@@ -221,9 +221,9 @@ namespace MLGui
 
         void PredictPoint(string input)
         {
-            Console.WriteLine(input);    
             
         }
+
         void PlotPrediction()
         {
 

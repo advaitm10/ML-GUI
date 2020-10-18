@@ -9,7 +9,6 @@ using System.Windows.Input;
 
 namespace MLGui
 {
-
     public class RegressionPageData : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
