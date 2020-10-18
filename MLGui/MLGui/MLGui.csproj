@@ -65,6 +65,7 @@
     <Compile Include="RegressionPage.xaml.cs">
       <DependentUpon>RegressionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RegressionPageData.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="StartMenu.xaml.cs">
       <DependentUpon>StartMenu.xaml</DependentUpon>

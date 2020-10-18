@@ -27,10 +27,11 @@ namespace MLGui
 
         string pythonPath;
 
+        RegressionPageData regressionData;
+
         string pythonPathFileName = System.AppDomain.CurrentDomain.BaseDirectory + "pythonPath.txt";
 
         RegressionModel model;
-
 
         LinearRegression regression;
         public MainWindow()
@@ -47,22 +48,7 @@ namespace MLGui
                 } 
             } else
             {
-                //ask for python install 
-
-                OpenFileDialog fileDialog = new OpenFileDialog();
-                fileDialog.Filter = "Executable (*.exe)|*.exe";
-                fileDialog.Title = "Select Python.exe";
-                if (fileDialog.ShowDialog() == true)
-                {
-                    if (fileDialog.FileName.EndsWith("python.exe"))
-                    {
-                        pythonPath = fileDialog.FileName;
-                        using (StreamWriter writer = new StreamWriter(pythonPathFileName))
-                        {
-                            writer.WriteLine(pythonPath);
-                        }
-                    }
-                }
+                PromptPythonInstall();
             }
         }
         
@@ -106,10 +92,6 @@ namespace MLGui
         {
             if (!regression.SelectModel)
             {
-                //define a regression model
-                //get a list of the names
-                //set model creation list sources.
-
                 model = new RegressionModel();
 
                 ModelCreationPopup.Visibility = Visibility.Visible;
@@ -150,7 +132,7 @@ namespace MLGui
 
             }
         }
-
+        
         void OnModelCreate()
         {
             Console.WriteLine("clicked model create button");
@@ -163,6 +145,37 @@ namespace MLGui
 
             string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3} {4}", 
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
+
+            result = GetLastResultLine(result);
+
+            ModelCreationPopup.Visibility = Visibility.Collapsed;
+
+            RegressionPagePopup.Visibility = Visibility.Visible;
+
+            regressionData = new RegressionPageData();
+            RegressionPagePopup.DataContext = regressionData;
+            regressionData.Accuracy = "25.423";
+            regressionData.TrainingLoss = "5.321";
+
+            Console.WriteLine("result: " + result);
+
+            regressionData.PlotPredictionEvent += PlotPrediction;
+            regressionData.PredictPointEvent += PredictPoint;
+        }
+
+        string GetLastResultLine(string input)
+        {
+            return input.Split('\n').Last();
+        }
+
+        void PredictPoint(string input)
+        {
+
+            Console.WriteLine(input);    
+        }
+        void PlotPrediction()
+        {
+
         }
 
         string RunFileAndReturnOutput(string path, string args)
@@ -183,6 +196,24 @@ namespace MLGui
                 {
                     string output = reader.ReadToEnd();
                     return output;
+                }
+            }
+        }
+
+        void PromptPythonInstall()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Executable (*.exe)|*.exe";
+            fileDialog.Title = "Select Python.exe";
+            if (fileDialog.ShowDialog() == true)
+            {
+                if (fileDialog.FileName.EndsWith("python.exe"))
+                {
+                    pythonPath = fileDialog.FileName;
+                    using (StreamWriter writer = new StreamWriter(pythonPathFileName))
+                    {
+                        writer.WriteLine(pythonPath);
+                    }
                 }
             }
         }

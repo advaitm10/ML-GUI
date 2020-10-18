@@ -49,6 +49,7 @@
                     <Button x:Name="ContinueButton" Content="Continue" FontSize="30" Grid.Row="4" Width="180" Height="50" Click="ContinueButton_Click"/>
 
                     <local:ModelCreationPage Grid.RowSpan="100" Visibility="Collapsed" x:Name="ModelCreationPopup"/>
+                    <local:RegressionPage Visibility="Collapsed" Grid.RowSpan="100" x:Name="RegressionPagePopup"/>
                 </Grid>
             </TabItem>
             <TabItem Name="ClassificationTab">

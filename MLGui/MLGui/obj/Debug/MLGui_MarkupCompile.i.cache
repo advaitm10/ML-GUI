@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\ignor\ML-GUI\MLGui\MLGui\App.xaml
-41712540594
+5-1256707342
 
-14-156045637
+161586257794
 14-1290796308
-MainWindow.xaml;ModelCreationPage.xaml;RegressionPage.xaml;StartMenu.xaml;
+MainWindow.xaml;ModelCreationPage.xaml;PointSelector.xaml;RegressionPage.xaml;StartMenu.xaml;
 
 True
 
