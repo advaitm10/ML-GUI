@@ -21,6 +21,8 @@ namespace MLGui
         ObservableCollection<TextWrapperClass> Continuous = new ObservableCollection<TextWrapperClass>();
         string PythonPath;
 
+        string pointScriptFilePath = System.AppDomain.CurrentDomain.BaseDirectory + "CalculatePoint.py";
+
         public PointSelector(int numOfCats, int numOfCont, string pythonPath) //what does this take in? It just needs the number of each I believe
         {
             InitializeComponent();
@@ -41,12 +43,32 @@ namespace MLGui
             ContinuousSelection.ItemsSource = Continuous;
         }
 
-        private void PredictPointButton_Click(object sender, RoutedEventArgs e)
+        string GetCSV(ObservableCollection<TextWrapperClass> input)
         {
-            
+            //probably do commas between conditionals and categoricals and spaces between the start of conditionals and categoricals
+            string result = "";
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (i != input.Count - 1)
+                {
+                    result += input[i].Text + ",";
+                } else
+                {
+                    result += input[i].Text;
+                }
+            }
+            return result;
         }
 
-        //actually we can just run the python script here, as long as we make that function static. 
+        private void PredictPointButton_Click(object sender, RoutedEventArgs e)
+        {
+            string csvCont = GetCSV(Continuous);
+            string csvCat = GetCSV(Categoricals);
+            csvCat.Trim();
+            csvCont.Trim();
+            MainWindow.RunFileAndReturnOutput(pointScriptFilePath, csvCat + " " + csvCont, PythonPath);
+            //shouldn't need to capture output
+        }
 
     }
 }
