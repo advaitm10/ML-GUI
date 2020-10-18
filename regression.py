@@ -16,24 +16,24 @@ import torch
 # DataFrame.dropna
 
 #take in data file paths using system args
-# args = sys.argv
-# datapath = args[1]
-# y = args[2]
-# categorical = args[3].split(",")
-# continuous = args[4].split(",")
-# cycles = int(args[5])
-# plot = int(args[6])
-# if(len(args) > 7):
-#     point = args[7]
-# else:
-#     point = None
-datapath = "adult.csv"
-y = "salary"
-categorical = ["native-country"]
-continuous = ["hours-per-week"]
-cycles = 1
-plot = "0"
-point = "bruh"
+args = sys.argv
+datapath = args[1]
+y = args[2]
+categorical = args[3].split(",")
+continuous = args[4].split(",")
+cycles = int(args[5])
+plot = int(args[6])
+if(len(args) > 7):
+    point = args[7]
+else:
+    point = None
+# datapath = "adult.csv"
+# y = "salary"
+# categorical = ["native-country"]
+# continuous = ["hours-per-week"]
+# cycles = 1
+# plot = "0"
+# point = "bruh"
 
 df = pd.read_csv(datapath)
 dls = TabularDataLoaders.from_df(df, path=datapath, y_names=y,
@@ -45,6 +45,8 @@ learn.fit_one_cycle(cycles)
 
 learn.path = Path('.')
 learn.export("export.pkl")
+
+print("bruh")
 
 if(plot == "1"):
     preds, targs = learn.get_preds(with_loss=False)
