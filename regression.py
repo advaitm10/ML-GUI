@@ -16,17 +16,24 @@ import torch
 # DataFrame.dropna
 
 #take in data file paths using system args
-args = sys.argv
-datapath = args[1]
-y = args[2]
-categorical = args[3].split(",")
-continuous = args[4].split(",")
-cycles = int(args[5])
-plot = int(args[6])
-if(len(args) > 7):
-    point = args[7]
-else:
-    point = None
+# args = sys.argv
+# datapath = args[1]
+# y = args[2]
+# categorical = args[3].split(",")
+# continuous = args[4].split(",")
+# cycles = int(args[5])
+# plot = int(args[6])
+# if(len(args) > 7):
+#     point = args[7]
+# else:
+#     point = None
+datapath = "adult.csv"
+y = "salary"
+categorical = ["native-country"]
+continuous = ["hours-per-week"]
+cycles = 1
+plot = "0"
+point = "bruh"
 
 df = pd.read_csv(datapath)
 dls = TabularDataLoaders.from_df(df, path=datapath, y_names=y,
@@ -34,7 +41,7 @@ dls = TabularDataLoaders.from_df(df, path=datapath, y_names=y,
     cont_names = continuous,
     procs = [Categorify, FillMissing, Normalize])
 learn = tabular_learner(dls, metrics=accuracy)
-learn.fit_one_cycle(20)
+learn.fit_one_cycle(cycles)
 
 learn.path = Path('.')
 learn.export("export.pkl")
@@ -56,4 +63,4 @@ if(plot == "1"):
 if(point != None):
     df = pd.read_csv("point.csv")
     row, clas, probs = learn.predict(df.iloc[0])
-    print(row.get_value(0, 'salary'))
+    print(row)
