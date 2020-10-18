@@ -23,3 +23,4 @@ C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\PointSelector.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\PointSelector.baml
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ClassificationPage.g.cs
 C:\Users\ignor\ML-GUI\MLGui\MLGui\obj\Debug\ClassificationPage.baml
+C:\Users\ignor\ML-GUI\MLGUI\MLGui\obj\Debug\MLGui.csprojAssemblyReference.cache

@@ -24,29 +24,21 @@
         <TextBlock Text="Create Model" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="25"/>
         
         <TextBlock Text="Choose Text Column" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Top" Margin="0,10,0,0"/>
-        <ComboBox Name="TextColumnNameSelector" Grid.Row="1" Width="200" Height="30" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Center">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Text}" FontSize="20"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+        <ComboBox Name="TextColumnNameSelector" Grid.Row="1" Width="200" Height="30" Grid.Column="1" Margin="0,20,0,0" HorizontalAlignment="Center"/>
 
         <!--
         <Button x:Name="AddIndependentColumnsButton" Content="Add" Margin="0,20,40,0" VerticalAlignment="Center" FontSize="18" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" Command="{Binding AddColumn}"/>
         -->
 
         <TextBlock Text="Choose Label Column" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Top" Margin="0,10,0,0"/>
-        <ComboBox Name="LabelColumnNameSelector" Grid.Row="1" Width="200" Height="30" Grid.Column="2" Margin="0,20,0,0" HorizontalAlignment="Center">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Text}" FontSize="20"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+        <ComboBox Name="LabelColumnNameSelector" Grid.Row="1" Width="200" Height="30" Grid.Column="2" Margin="0,20,0,0" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Text Input" Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="18"/>
         <TextBox x:Name="TextInput" Grid.Row="2" Grid.Column="1" Text="{Binding Text}" TextAlignment="Center" Width="150" VerticalAlignment="Center" Height="30" Margin="0,20,0,0" HorizontalAlignment="Center"/>
+
+        <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" FontSize="18">
+            <Run Text="Output:"/>
+        </TextBlock>
 
         <Button x:Name="CreateModelButton" Content="Create Model" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Width="200" Height="60" Command="{Binding ContinueClicked}"/>
     </Grid>

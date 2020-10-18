@@ -148,7 +148,10 @@ namespace MLGui
 
         void CreateClassificationModel()
         {
-            cmodel = new ClassificationModel();
+            //This isn't really that complicated
+            //We just need to store the settings somewhere
+            //That's the point of cmodel
+            //All the actual work is done by RunFileAndReturnOutput
 
             ClassificationPagePopup.Visibility = Visibility.Visible;
 
@@ -162,20 +165,42 @@ namespace MLGui
                 columns = reader.ReadLine().Split(',');
             }
 
+            ClassificationPagePopup.DataContext = cmodel;
+
             ClassificationPagePopup.LabelColumnNameSelector.ItemsSource = columns;
             ClassificationPagePopup.TextColumnNameSelector.ItemsSource = columns;
 
-            cmodel.ContinueClickedEvent += ContinueButtonClicked;
-        }
-        void ContinueButtonClicked()
-        {
-            cmodel.LabelColumn = (string)ClassificationPagePopup.LabelColumnNameSelector.SelectedItem;
-            cmodel.TextColumn = (string)ClassificationPagePopup.LabelColumnNameSelector.SelectedItem;
 
-            string args = String.Format("{0} {1} {2} {3} {4} {5}",
+            cmodel.ContinueClickedEvent += ContinueButtonClickedCmodel;
+        }
+        void ContinueButtonClickedCmodel()
+        {
+            Console.WriteLine("clicked");
+
+            cmodel.LabelColumn = (string)ClassificationPagePopup.LabelColumnNameSelector.SelectedItem;
+            cmodel.TextColumn = (string)ClassificationPagePopup.TextColumnNameSelector.SelectedItem;
+
+            string[] words = cmodel.Text.Split(' ');
+            string csvWords = "";
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (i != words.Length - 1)
+                {
+                    csvWords += words[i] + ",";
+                } else
+                {
+                    csvWords += words[i];
+                }
+            }
+
+            cmodel.Text = csvWords;
+
+            string args = String.Format("{0} {1} {2} {3}",
                 cmodel.Data, cmodel.TextColumn, cmodel.LabelColumn, cmodel.Text);
 
-            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py",
+            Console.WriteLine("cmodel args: " + args);
+
+            string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "NLP.py",
                 args, pythonPath);
 
             Console.WriteLine("result before split: " + result);
@@ -218,11 +243,13 @@ namespace MLGui
 
             Console.WriteLine("result before split: " + result);
 
+            string[] beforeBruh = result.Split(new string[] { "bruh"}, StringSplitOptions.None);
+
             string prediction = "";
 
             prediction = GetLastValueInResult(result);
 
-            result = GetLastResultLine(result);
+            result = GetLastResultLine(beforeBruh);
 
             ModelCreationPopup.Visibility = Visibility.Collapsed;
 
@@ -294,10 +321,11 @@ namespace MLGui
             return ans;
         }
 
-        string GetLastResultLine(string input)
+        string GetLastResultLine(string[] input)
         {
+            string inputString = input[0];
 
-            string[] splitInput = input.Split('\n');
+            string[] splitInput = inputString.Split('\n');
 
             Console.WriteLine("Length: " + splitInput.Length);
 
@@ -305,7 +333,7 @@ namespace MLGui
             {
                 Console.WriteLine(splitInput[i] + "; " + i);
             }
-            return splitInput[splitInput.Length - 4];
+            return splitInput[splitInput.Length - 2];
         }
 
         void PredictPoint()
