@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width=".2*"/>
         </Grid.ColumnDefinitions>
@@ -30,6 +30,6 @@
             <Run Text="{Binding Accuracy}"/>
         </TextBlock>
         <Button Grid.Column="1" HorizontalAlignment="Left" Command="{Binding PredictPoint}" Content="Predict Point" VerticalAlignment="Top" FontSize="25" Margin="16,10,0,0" Grid.Row="3"/>
-        <Button Grid.Column="1" Grid.Row="2" Command="{Binding PlotPrediction}" Content="Plot Prediction vs Actual" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="22" Margin="0,0,0,10"/>
+        <Button Grid.Column="1" Grid.Row="2" Command="{Binding PlotPrediction}" Content="Plot Prediction vs Actual" VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="22" Margin="16,0,0,10"/>
     </Grid>
 </UserControl>

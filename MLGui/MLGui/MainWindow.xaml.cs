@@ -146,16 +146,27 @@ namespace MLGui
             string result = RunFileAndReturnOutput(System.AppDomain.CurrentDomain.BaseDirectory + "regression.py", String.Format("{0} {1} {2} {3} {4}", 
                 regression.Data, model.DependentColumn, categorical, continuous, model.Cycles));
 
-            //result = GetLastResultLine(result);
+            Console.WriteLine("result before split: " + result);
+
+            result = GetLastResultLine(result);
 
             ModelCreationPopup.Visibility = Visibility.Collapsed;
 
+            SetUpRegressionPage(result);
+            
+        }
+
+        void SetUpRegressionPage(string result)
+        {
             RegressionPagePopup.Visibility = Visibility.Visible;
 
             regressionData = new RegressionPageData();
             RegressionPagePopup.DataContext = regressionData;
-            regressionData.Accuracy = "25.423";
-            regressionData.TrainingLoss = "5.321";
+
+            List<string> values = ExtractValuesFromRegressionResult(result);
+
+            regressionData.Accuracy = values[3];
+            regressionData.TrainingLoss = values[1];
 
             Console.WriteLine("result: " + result);
 
@@ -163,15 +174,55 @@ namespace MLGui
             regressionData.PredictPointEvent += PredictPoint;
         }
 
+        List<string> ExtractValuesFromRegressionResult(string regResult)
+        {
+            List<string> result = new List<string>();
+
+            regResult.Trim();
+
+            char lastChar = ' ';
+
+            string word = "";
+            for (int i = 0; i < regResult.Length; i++)
+            {
+                char nextChar = regResult[i];
+                if (nextChar == ' ' && lastChar != ' ')
+                {
+                    result.Add(word);
+                    word = "";
+                } else if (nextChar != ' ' && lastChar == ' ' || lastChar != ' ' && nextChar != ' ')
+                {
+                    word += regResult[i];
+                }
+                lastChar = nextChar;
+            }
+
+            foreach (string s in result)
+            {
+                Console.WriteLine("Value: " + s);
+            }
+
+            return result;
+        }
+
         string GetLastResultLine(string input)
         {
-            return input.Split('\n')[0];
+
+            string[] splitInput = input.Split('\n');
+
+            Console.WriteLine("Length: " + splitInput.Length);
+            
+            for (int i = 0; i < splitInput.Length; i++)
+            {
+                Console.WriteLine(splitInput[i] + "; " + i);
+            }
+            return splitInput[splitInput.Length - 2];
         }
 
         void PredictPoint(string input)
         {
-
             Console.WriteLine(input);    
+            
         }
         void PlotPrediction()
         {
